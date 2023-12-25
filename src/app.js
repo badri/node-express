@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import cowsay from "cowsay";
 
 import * as middleware from "./utils/middleware.js";
 import helloRoute from "./routes/helloRouter.js";
@@ -22,6 +23,22 @@ app.get("/", (req, res) => {
 });
 
 app.use("/hello", helloRoute);
+
+app.get("/:text", function (req, res) {
+  let text;
+
+  try {
+    text = req.params.text;
+  } catch (e) {
+    text = "Hi Awesome People!";
+  }
+  const responseText = `
+    <pre>${cowsay.say({ text })}</pre>
+    <br/><br/>
+  `;
+
+  res.send(responseText);
+});
 
 // custom middleware
 app.use(middleware.unknownEndpoint);
